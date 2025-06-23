@@ -1,0 +1,73 @@
+# rPPG Video Dataset Preparation Tools
+
+This repository provides Python scripts to prepare video datasets for Remote Photoplethysmography (rPPG) analysis. These tools help characterize video properties and perform essential pre-processing steps.
+
+## Table of Contents
+
+1.  [Features](#1-features)
+2.  [Prerequisites](#2-prerequisites)
+3.  [Installation](#3-installation)
+4.  [Usage](#4-usage)
+    * [Video Characterization](#41-video-characterization)
+    * [Audio Removal](#42-audio-removal)
+5.  [Dataset Considerations for rPPG](#5-dataset-considerations-for-rppg)
+6.  [License](#6-license)
+
+## 1. Features
+
+* **Video Characterization:** Analyze video files (resolution, FPS, codec, bitrate, pixel format) to understand their suitability for rPPG.
+* **Audio Removal:** Efficiently remove audio tracks from videos without re-encoding the video stream, reducing file size.
+
+## 2. Prerequisites
+
+* **Python 3.x**
+* **FFmpeg:** Command-line tool must be installed and in your system's PATH.
+    * **Linux/macOS:** `sudo apt-get install ffmpeg` or `brew install ffmpeg`
+    * **Windows:** Download from [ffmpeg.org](https://ffmpeg.org/download.html) and add `ffmpeg/bin` to your PATH.
+
+## 3. Installation
+
+1.  Clone this repository.
+    ```bash
+    git clone [https://github.com/your-username/rppg-dataset-tools.git](https://github.com/your-username/rppg-dataset-tools.git)
+    cd rppg-dataset-tools
+    ```
+2.  Install Python dependencies (recommended in a virtual environment):
+    ```bash
+    python -m venv venv
+    source venv/bin/activate # Windows: venv\Scripts\activate
+    pip install -r requirements.txt
+    ```
+    `requirements.txt` contents:
+    ```
+    opencv-python
+    ffmpeg-python
+    ```
+
+## 4. Usage
+
+### 4.1. Video Characterization
+
+The `characterize_video.py` script provides detailed video properties (e.g., `yuv420p` pixel format is common for HEVC and impacts rPPG).
+
+1.  Open `characterize_video.py` and set `my_video_to_analyze` to your video's path.
+2.  Run: `python characterize_video.py`
+
+### 4.2. Audio Removal
+
+The `remove_audio.py` script removes audio without re-encoding the video.
+
+1.  Open `remove_audio.py` and set `input_video_directory` to your video folder.
+2.  Run: `python remove_audio.py`
+
+## 5. Dataset Considerations for rPPG
+
+For rPPG research, video characteristics are key:
+
+* **Pixel Format (`yuv420p` vs. `bgr24`):** `bgr24` (uncompressed RGB) is ideal, preserving subtle color changes. `yuv420p` (common in HEVC/H.264) heavily subsamples color, significantly challenging rPPG algorithms.
+* **Bitrate:** Higher bitrates generally indicate less aggressive compression and better signal preservation.
+* **Ground Truth & Metadata:** Always include synchronized raw physiological ground truth and detailed metadata (camera, conditions, subject info, sync offset).
+
+## 6. License
+
+[Choose a license, e.g., MIT, Apache 2.0. Example: MIT License]
